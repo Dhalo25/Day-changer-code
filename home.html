@@ -1,0 +1,126 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- Page Content-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<!--<script>
+    socket = io();
+    socket.connect(url_to('home'));
+    socket.on('connect', function () {
+        socket.send('a');
+    })
+    socket.on('message', function (msg) {
+        console.log(msg);
+        socket.send('a')
+    })
+</script>-->
+{% if start %}
+    <section class="py-5">
+        <div class="container px-5">
+            <!--<h1 class="fw-bolder fs-5 mb-4">Company Blog</h1> -->
+            <div class="card border-0 shadow rounded-3 overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="row gx-0">
+                        <div class="col-lg-6 col-xl-5 py-lg-5">
+                            <div class="p-4 p-md-5">
+                                <div class="badge bg-primary bg-gradient rounded-pill mb-2">Intro</div>
+                                <div class="h2 fw-bolder">Guess the day</div>
+                                <p>The purpose of this project is to create a platform for people to learn and practice predicting the day of the week for any given calendar date with some math</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xl-7"><div class="bg-featured-blog" style="background-image: url('https://live.staticflickr.com/101/296747958_8c15e91e3f_b.jpg') "></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container px-5">
+        {% else %}
+        <div class="container px-5">
+            {% if invalid %}
+            <div class="container px-5 py-4">
+                <div class="alert alert-warning">
+                    <h1 class="fs-4 text-center"> [ INVALID RESPONSE ]  Please enter a day of the week (Monday, Tuesday...)</h1>
+                </div>
+            </div>
+
+            {% else %}
+            <div class="container px-5 py-4">
+                <div class="alert alert-{{params.alert_type}}">
+                    <h1 class="fs-4 text-center">{{params.result_msg}}</h1>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+            <div class="row justify-content-center">
+                <div class="text-center my-1">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="difficulty-dropdown" data-bs-toggle="dropdown">
+                            Difficulty [{{difficulty}}]
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="difficulty-dropdown">
+                            <li><a href="{{url_for('one_year')}}" class="dropdown-item">Easy: Only 2022</a></li>
+                            <li><a href="{{url_for('one_century')}}" class="dropdown-item">Medium: 2000-2099</a></li>
+                            <!--<li><a href="#" class="dropdown-item">3</a></li>-->
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Dropdown script-->
+        <script src="content/js/jquery.min.js"></script>
+        <script src="content/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.dropdown-toggle').dropdown();
+            });
+        </script>
+
+
+        <!-- Input Box -->
+        <section class="py-4">
+            <div class="container px-5">
+                <aside class="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-3">
+                    <div class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
+                        <div class="mb-4 mb-xl-0">
+                            <div class="fs-1 fw-bold text-white">{{params.calendar_day}}</div>
+                            <div class="text-white-50">Guess the correct day of the week for the date above</div>
+                        </div>
+                        <div class="ms-xl-4">
+                            <form class="input-group mb-2" autocomplete="off" action={{url_for('answer_submitted')}} method='post'>
+                                <input class="form-control" type="text" autofocus name="answer" placeholder="Guess here..." aria-label="Guess here..." aria-describedby="submit_button" />
+                                <button class="btn btn-outline-light" id="submit_button" type="submit">Enter</button>
+                            </form>
+                            <div class="small text-white-50">You can go to our learn page if you need a hand</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+        {% if not start %}
+        <!-- Testimonial section-->
+        <div class="py-5 bg-light">
+            <div class="container px-5 my-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-lg-10 col-xl-7">
+                        <div class="text-center">
+                            <div class="fs-2 mb-2 fst-italic">| Current Score: {{params.score}} |</div>
+                            <div class="fs-2 mb-4 fst-italic">| Streak: {{params.streak}} |</div>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <!--<img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />-->
+                                <!--<div class="fw-bold">
+                                Tom Ato
+                                <span class="fw-bold text-primary mx-1">/</span>
+                                CEO, Pomodoro
+                            </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="fw-bolder fs-4 mb-2"></h2>
+        {% endif %}
+
+        
+        {% endblock content %}
